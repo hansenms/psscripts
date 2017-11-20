@@ -86,5 +86,5 @@ $issuerUrl = "https://sts.windows.net/" +  $aadConnection.Tenant.Id.Guid + "/"
 
 return @{ 'IssuerUrl' = $issuerUrl
           'ClientId' = $appReg.AppId 
-          'ClientKey' = $Password
+          'ClientSecret' = $Password
         }
