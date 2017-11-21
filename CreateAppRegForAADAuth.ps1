@@ -82,7 +82,14 @@ $reqAAD.ResourceAccess = $delPermission1
 
 $appReg = New-AzureADApplication -DisplayName $displayName -IdentifierUris $SiteUri -Homepage $SiteUri -ReplyUrls $replyUrl -PasswordCredential $PasswordCredential -RequiredResourceAccess $reqAAD
 
-$issuerUrl = "https://sts.windows.net/" +  $aadConnection.Tenant.Id.Guid + "/"
+$loginBaseUrl = $(Get-AzureRmEnvironment -Name $Environment).ActiveDirectoryAuthority
+
+#Small inconsistency for US gov in current AzureRm module
+if ($loginBaseUrl -eq "https://login-us.microsoftonline.com/") {
+    $loginBaseUrl = "https://login.microsoftonline.us/"
+}
+
+$issuerUrl = $loginBaseUrl +  $aadConnection.Tenant.Id.Guid + "/"
 
 return @{ 'IssuerUrl' = $issuerUrl
           'ClientId' = $appReg.AppId 
